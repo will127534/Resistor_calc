@@ -55,11 +55,14 @@ function readable_format(r){
     if (r>1000) {
         return String(r/1000)+"K";
     }
+
+    
     return r;
 }
 function readLR(lr_str) {
 
     lr_str = lr_str.toLocaleLowerCase()
+
     if (lr_str.endsWith("k")) {
         return parseFloat(lr_str)*1000;
     }
