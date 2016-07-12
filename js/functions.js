@@ -3,12 +3,17 @@ function findValue(ratio,LR){
 	var i;
 	var j;
     var start_index;
+    var error_array= new Array();
+    var a_array= new Array();
+    var b_array= new Array();
+
     for (i = 0; i < Resistor_value.length ;i++) {
     	if( Resistor_value[i]>LR){
     		start_index = i;
     		break;
     	}
     }
+
     for (i = start_index; i < Resistor_value.length ;i++) {
         var a = Resistor_value[i];
         for (j = start_index; j < Resistor_value.length ;j++) {
@@ -16,13 +21,32 @@ function findValue(ratio,LR){
 			var ratio_test = (a+b)/a;
 			var error = (Math.abs(ratio_test-ratio)/ratio);
 			if (error<0.05) {
+                error_array.push(error);
+                a_array.push(a);
+                b_array.push(b);
 				//console.log(ratio_test);
 				//console.log(error);
-				return [a,b];
+				//return [a,b];
 			}
         }
     }
-    return [0,0];
+    console.log(error_array);
+    if (a_array[0]==0) {
+        return[0,0];
+    }
+
+    var min_ind;
+    var min_error=1;
+
+    for (var i = error_array.length - 1; i >= 0; i--) {
+        if(error_array[i]<=min_error){
+            min_error = error_array[i];
+            min_ind = i;
+        }
+    }
+    console.log(min_error);
+    console.log(min_ind);
+    return [a_array[min_ind],b_array[min_ind]];
 }
 function readable_format(r){
     if (r>100000) {
