@@ -58,7 +58,6 @@ function readable_format(r){
     return r;
 }
 function readLR(lr_str) {
-    if (Number.isFinite(lr_str)) {return parseFloat(lr_str);}
 
     lr_str = lr_str.toLocaleLowerCase()
     if (lr_str.endsWith("k")) {
@@ -67,6 +66,8 @@ function readLR(lr_str) {
     if (lr_str.endsWith("m")) {
         return parseFloat(lr_str)*1000*1000;
     }
+    return parseFloat(lr_str);
+
 }
 function myFunction() {
 	var x = document.getElementById("frm1");
