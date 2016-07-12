@@ -9,8 +9,6 @@ function findValue(ratio,LR){
     		break;
     	}
     }
-
-
     for (i = start_index; i < Resistor_value.length ;i++) {
         var a = Resistor_value[i];
         for (j = start_index; j < Resistor_value.length ;j++) {
@@ -18,7 +16,6 @@ function findValue(ratio,LR){
 			var ratio_test = (a+b)/a;
 			var error = (Math.abs(ratio_test-ratio)/ratio);
 			if (error<0.05) {
-               
 				//console.log(ratio_test);
 				//console.log(error);
 				return [a,b];
@@ -36,20 +33,34 @@ function readable_format(r){
     }
     return r;
 }
+function readLR(lr_str) {
+    if (Number.isFinite(lr_str)) {return parseFloat(lr_str);}
+
+    lr_str = lr_str.toLocaleLowerCase()
+    if (lr_str.endsWith("k")) {
+        return parseFloat(lr_str)*1000;
+    }
+    if (lr_str.endsWith("m")) {
+        return parseFloat(lr_str)*1000*1000;
+    }
+}
 function myFunction() {
-	
 	var x = document.getElementById("frm1");
+    var output_string = "Error:電阻不存在";
+
     for (i = 0; i < x.length ;i++) {
         console.log(x.elements[i].value);
     }
     var ratio = parseFloat(x.elements[0].value);
-    var LR =  parseFloat(x.elements[1].value);
+    var LR = readLR(x.elements[1].value);
 
     var a = findValue(ratio,LR);
     console.log(a);
-    var output_string = "Error:電阻不存在"
+    if (a[0]==0) {
+        a = findValue(1/ratio,LR);
+    }
     if (a[0]!=0) {
-        var output_string = "R1: "+readable_format(a[0])+"歐姆  "+" R2: "+readable_format(a[1])+"歐姆\n"
+            output_string = "R1: "+readable_format(a[0])+"歐姆  "+" R2: "+readable_format(a[1])+"歐姆\n"
     }
     document.getElementById("Output").innerHTML = output_string;
 }
